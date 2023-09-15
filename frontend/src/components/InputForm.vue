@@ -19,9 +19,15 @@ function postUrl(){
     <ButtomUrl/>
   </form>
 
-  <div id="res" class="mb-6 flex-coloumn">
-    <p class="mb-2">URL Original: {{ apiUrl.response.long_url }}</p>
-    <p class="mb-2">URL Encurtada: {{ apiUrl.response.short_url }}</p>
+  <div v-if="Object.keys(apiUrl.response).length != 0" id="res" class="mb-6 flex-coloumn">
+    <div class="grid grid-flow-col auto-cols-max">
+      <div class="mb-2">URL Original: {{ apiUrl.response.long_url }}</div>
+      <div class="mb-2">{{ apiUrl.response.long_url }}</div>
+    </div>
+    <div class="grid grid-flow-col auto-cols-max">
+      <div class="mb-2">URL Encurtada: {{ apiUrl.response.short_url }}</div>
+      <div class="mb-2">{{ apiUrl.response.short_url }}</div>
+    </div>
     <p class="mb-2">Qr Code:</p>
     <div class="w-3/4" v-html="apiUrl.response.qr_code"></div>
   </div>
