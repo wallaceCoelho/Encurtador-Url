@@ -1,9 +1,11 @@
-<script setup>
+<script>
 
-const props = defineProps({
-            title:String,
-            subject:String   
-        })
+export default{
+    props: {
+        title:String,
+        subject:String   
+    }
+}
 </script>
 <template>
 
