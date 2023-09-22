@@ -8,7 +8,7 @@ import Buttom from './Buttom.vue';
         <div>
             <h1 class="text-white font-bold text-4xl font-sans">Encurtador de URL</h1>
             <p class="text-white mt-1">Encurte suas url e gratuitamente</p>
-            <Buttom text="Ver mais" class="my-5"/>            
+            <Buttom text="Ver mais" class="mt-3"/>            
         </div>
     </div>
 </template>

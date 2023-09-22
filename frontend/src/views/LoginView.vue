@@ -20,7 +20,7 @@ import BannerForms from '../components/BannerForms.vue';
                     </svg>
                     <input class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="Endereço de e-mail" />
                 </div>
-                <div class="flex items-center border-2 py-2 px-3 rounded-2xl">
+                <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
                         fill="currentColor">
                         <path fill-rule="evenodd"
@@ -29,8 +29,8 @@ import BannerForms from '../components/BannerForms.vue';
                     </svg>
                     <input class="pl-2 outline-none border-none" type="text" name="" id="" placeholder="Senha" />
                 </div>
-                <Buttom text="Entrar" class="my-6"/>
-                <div class="flex justify-between">
+                <Buttom text="Entrar"/>
+                <div class="flex justify-between mt-3">
                     <RouterLink to="" class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Esqueci minha senha</RouterLink>
                     <RouterLink to="register" class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Cadastrar</RouterLink>
                 </div>

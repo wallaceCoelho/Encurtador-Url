@@ -33,6 +33,6 @@ import InputForm from '../components/InputForm.vue';
 
 <style scoped>
 .box{
-  margin-top: 10%;
+  margin-top: 5%;
 }
 </style>
