@@ -13,7 +13,7 @@ onMounted(() => {
  
 <a type="button" data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block cursor-pointer py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-800 to-purple-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" onclick="my_modal_4.showModal()">Termos de Uso</a>
 
-<div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-hidden md:inset-0 h-[calc(80%-1rem)] max-h-full">
+<div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full md:w-full sm:w-full p-4 overflow-x-hidden overflow-y-hidden md:inset-0 h-[calc(80%-1rem)] max-h-full">
     <div class="modalScroll relative w-full max-w-2xl max-h-full overflow-y-scroll pb-8">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">

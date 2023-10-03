@@ -39,7 +39,7 @@ class UrlService implements IUrlService
         try
         {
             $urlDb = Urls::where('url', $longUrl)
-                ->where('user_id', 1)->firstOrFail();
+                ->where('user_id', 1)->first();
             
             if(isset($urlDb))
             {

@@ -13,7 +13,7 @@ import InputForm from '../components/InputForm.vue';
     <div class="w-full text-center my-16">
       <p class="text-4xl font-medium text-gray-900 dark:text-white">Por quê utilizar o <span class="text-blue-800 to-purple-700 font-medium">Short Url?</span></p>
     </div>
-    <div class="flex justify-evenly flex-wrap max-w-max mx-auto mb-14">
+    <div class="flex justify-evenly flex-wrap max-w-max mx-auto mb-34">
       <Cards 
         title="Histórico de urls"
         subject="No Short Url você pode guardar por quanto tempo quiser suas URLS encurtadas e seus respectivos QR Codes e utiliza-los quando quiser"  

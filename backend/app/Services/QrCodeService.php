@@ -32,30 +32,11 @@ class QrCodeService implements IQrCodeService
             $urlCode = explode("=", $url);
             
             $urlDb = Urls::where('short_url', $urlCode[1])
-            ->where('user_id', 1)->firstOrFail();
+            ->where('user_id', 1)->first();
             
-
             if(isset($urlDb))
             {
-                $qrCodeDb = self::findQrCode($urlDb['id'], 1);
-                
-                if(!isset($qrCodeDb))
-                {
-                    $svg = self::svgQrCode("http://localhost:90/api/?uri=".$url);
-                    $svgName = self::saveDirectorySvg($svg);
-                    
-                    $this->qrCode->create([
-                        'dir_code' => $svgName,
-                        'url_id' => $urlDb['id'],
-                        'user_id' => 1
-                    ])->save();
-    
-                    return $svg;
-                }
-                else
-                {
-                    return Storage::get($qrCodeDb['dir_code']);
-                }
+                return self::storeQrCode( $urlDb['id'], $url);
             }
             return "Ocorreu um erro ao ler a URL!";
         }
@@ -66,6 +47,28 @@ class QrCodeService implements IQrCodeService
         catch(ErrorException $e)
         {
             return "Algo deu errado: ".$e->getMessage();
+        }
+    }
+
+    private function storeQrCode($urlDb, $url)
+    {
+        $qrCodeDb = self::findQrCode($urlDb, 1);
+
+        if(!isset($qrCodeDb))
+        {
+            $svg = self::svgQrCode("http://localhost:90/api/?uri=".$url);
+            $svgName = self::saveDirectorySvg($svg);
+            
+            $this->qrCode->create([
+                'dir_code' => $svgName,
+                'url_id' => $urlDb,
+                'user_id' => 1
+            ])->save();
+            return $svg;
+        }
+        else
+        {
+            return Storage::get($qrCodeDb['dir_code']);
         }
     }
 
@@ -93,7 +96,7 @@ class QrCodeService implements IQrCodeService
         try
         {
             return QrCodes::where('url_id', $url_id)
-                ->where('user_id', $user_id)->firstOrFail();
+                ->where('user_id', $user_id)->first();
         }
         catch(ModelNotFoundException $e)
         {
