@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UrlController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,9 @@ Route::controller(UrlController::class)->group(function (){
     Route::get('/', 'redirectUrl');
     Route::post('/url', 'shortUrl');
 });
+
+Route::middleware('api')->get('/user', function (Request $request){
+    return $request->user();
+});
+
+Route::post('/login', [AuthController::class, 'login']);

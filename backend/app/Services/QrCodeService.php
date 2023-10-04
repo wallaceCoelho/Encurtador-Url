@@ -34,11 +34,8 @@ class QrCodeService implements IQrCodeService
             $urlDb = Urls::where('short_url', $urlCode[1])
             ->where('user_id', 1)->first();
             
-            if(isset($urlDb))
-            {
-                return self::storeQrCode( $urlDb['id'], $url);
-            }
-            return "Ocorreu um erro ao ler a URL!";
+            return isset($urlDb) ? self::storeQrCode( $urlDb['id'], $url) :
+                "Ocorreu um erro ao ler a URL!";
         }
         catch (QueryException $e)
         {
@@ -54,7 +51,7 @@ class QrCodeService implements IQrCodeService
     {
         $qrCodeDb = self::findQrCode($urlDb, 1);
 
-        if(!isset($qrCodeDb))
+        if(isset($qrCodeDb))
         {
             $svg = self::svgQrCode("http://localhost:90/api/?uri=".$url);
             $svgName = self::saveDirectorySvg($svg);
