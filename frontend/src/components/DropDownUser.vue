@@ -1,10 +1,17 @@
 <script setup>
 import { initFlowbite } from 'flowbite'
 import { onMounted } from 'vue'
+import { authStore } from '../stores/auth'
+
+const auth = authStore()
 
 onMounted(() => {
     initFlowbite();
 })
+
+async function logout() {
+    await auth.signOut();
+}
 
 </script>
 
@@ -28,7 +35,7 @@ onMounted(() => {
               <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Configurações</a>
             </li>
             <li>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sair</a>
+              <a type="button" @click="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sair</a>
             </li>
           </ul>
         </div>

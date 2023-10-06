@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Interfaces\IAuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -14,20 +15,11 @@ class AuthController extends Controller
         $this->auth = $auth;
     }
 
-    public function login(Request $request)
+    public function login(Request $request) : JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return response()->json([
-            'data' => [
-                'token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60
-            ]
-        ]);
+        return $this->auth->login($credentials);
     }
+    
 }

@@ -1,7 +1,7 @@
 <script setup>
 import Buttom from './Buttom.vue';
-import { urlApiStore } from '../stores/api';
-import { ref} from 'vue';
+import { urlApiStore } from '../stores/url';
+import { ref } from 'vue';
 
 const apiUrl = urlApiStore()
 const url = ref('')

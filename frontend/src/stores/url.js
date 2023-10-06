@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-export const urlApiStore = defineStore('api', () => {
+export const urlApiStore = defineStore('url', () => {
     let error = ''
     let response = {}
     
