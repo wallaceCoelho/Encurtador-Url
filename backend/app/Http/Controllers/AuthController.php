@@ -21,5 +21,10 @@ class AuthController extends Controller
 
         return $this->auth->login($credentials);
     }
+
+    public function logout() : JsonResponse
+    {
+        return $this->auth->logout();
+    }
     
 }

@@ -1,6 +1,6 @@
 <script setup>
 import Cards from '../components/Cards.vue';
-import InputForm from '../components/InputForm.vue';
+import InputForm from '../components/InputForm.vue'; 
 
 </script>
 

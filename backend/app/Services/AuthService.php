@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\Interfaces\IAuthService;
 use ErrorException;
 use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthService implements IAuthService
 {
@@ -33,10 +34,12 @@ class AuthService implements IAuthService
     {
         try
         {
-            auth()->logout();
+            if (auth()->check()) {
+                auth()->logout();
+            }
             return response()->json(['message' => 'Sessão finalizada com sucesso']);
         }
-        catch(ErrorException $e)
+        catch(JWTException $e)
         {
             return response()->json(['message' => 'Erro: '.$e]);
         }

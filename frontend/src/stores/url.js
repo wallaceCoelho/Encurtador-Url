@@ -16,5 +16,9 @@ export const urlApiStore = defineStore('url', () => {
             this.error = 'Erro: ', e
         })
     }
+
+    async function getUrls(){
+        
+    }
     return { created , response , error }
 })

@@ -20,8 +20,5 @@ Route::controller(UrlController::class)->group(function (){
     Route::post('/url', 'shortUrl');
 });
 
-Route::middleware('api')->group(function (){
-    Route::get('/logout', [AuthController::class, 'login']);
-});
-
+Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/login', [AuthController::class, 'login']);
