@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Interfaces\IQrCodeService;
 use App\Services\Interfaces\IUrlService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UrlController extends Controller
@@ -17,7 +18,7 @@ class UrlController extends Controller
         $this->qrCode = $qrCode;
     }
 
-    public function redirectUrl(Request $request)
+    public function redirectUrl(Request $request) : JsonResponse
     {
         return $request->get('uri') != null ?  
             response()->json([
@@ -29,7 +30,7 @@ class UrlController extends Controller
             ]);
     }
 
-    public function shortUrl(Request $request)
+    public function shortUrl(Request $request) : JsonResponse
     {
         $responseUrl = $this->url->compactUrl($request->get('data'));
         $responseQrCode = $this->qrCode->generateQrCode($responseUrl['short_url']);
@@ -39,5 +40,12 @@ class UrlController extends Controller
             'short_url' => $responseUrl['short_url'],
             'qr_code' => $responseQrCode
         ], 200);
+    }
+
+    public function getAllUrls() : JsonResponse
+    {
+        return response()->json([
+            'url' => $this->url->getAllUrls()
+        ]);
     }
 }

@@ -11,20 +11,21 @@ use Illuminate\Database\QueryException;
 
 class UrlService implements IUrlService
 {
-    protected User $user;
     protected Urls $url;
+    protected $userId;
 
-    public function __construct(User $user, Urls $url) {
-        $this->user = $user;
+    public function __construct(Urls $url) {
+        $user = auth()->user();
         $this->url = $url;
+        $this->userId = $user['id'];
     }
 
     public function redirect(string $url) : string
     {
         try
         {
-            $urlDb = Urls::where('short_url', $url)
-            ->where('user_id', 1)->firstOrFail();
+            $urlDb = $this->url->where('short_url', $url)
+            ->where('user_id', $this->userId)->firstOrFail();
             
             return $urlDb['url'];
         }
@@ -38,8 +39,8 @@ class UrlService implements IUrlService
     {   
         try
         {
-            $urlDb = Urls::where('url', $longUrl)
-                ->where('user_id', 1)->first();
+            $urlDb = $this->url->where('url', $longUrl)
+                ->where('user_id', $this->userId)->first();
             
             if(isset($urlDb))
             {
@@ -75,6 +76,22 @@ class UrlService implements IUrlService
                 'long_url' => $e->getMessage(),
                 'short_url' => $e->getMessage(),
             ]);
+        }
+    }
+
+    public function getAllUrls() : array
+    {
+        try
+        {
+            return auth()->check() ? array($this->url->where('user_id', $this->userId)->get()) : [];
+        }
+        catch(ModelNotFoundException $e)
+        {
+            return (['error' => 'ERRO: '. $e->getMessage()]);
+        }
+        catch(ErrorException $e)
+        {
+            return (['error' => 'ERRO: '. $e->getMessage()]);
         }
     }
 

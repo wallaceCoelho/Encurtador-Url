@@ -7,4 +7,6 @@ interface IUrlService
     public function redirect(string $url) : string;
 
     public function compactUrl(string $url) : array;
+
+    public function getAllUrls() : array;
 }

@@ -11,7 +11,7 @@ export const authStore = defineStore('auth', () => {
         })
         .then((res) => {
             localStorage.setItem('token', JSON.stringify(res.data))
-            location.reload()
+            location.href = "/profile"
         })
     }
 
@@ -28,7 +28,7 @@ export const authStore = defineStore('auth', () => {
             await axios.post("/api/logout", data, config)
             .then((res) => {
                 localStorage.removeItem('token')
-                location.reload()
+                location.href = "/"
             })
             .catch((error) => {
                 console.log(error)

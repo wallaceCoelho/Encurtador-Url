@@ -12,7 +12,6 @@ const password = ref('')
 function postLogin(){
     login.signIn(email.value.value, password.value.value)
 }
-
 </script>
 
 <template>

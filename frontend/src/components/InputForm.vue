@@ -7,8 +7,9 @@ const apiUrl = urlApiStore()
 const url = ref('')
 
 function postUrl(){
-  apiUrl.created(url.value.value)
+  apiUrl.makeShortUrl(url.value.value)
 }
+
 </script>
 
 <template>
