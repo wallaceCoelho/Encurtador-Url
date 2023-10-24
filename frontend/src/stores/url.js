@@ -1,34 +1,37 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { ref } from 'vue'
 
 export const urlApiStore = defineStore('url', () => {
-    let error = ''
-    let response = {}
+    let error = ref('')
+    let response = ref({})
+    let url = ref([])
 
-    async function created(){
+    async function getUrl() {
         const token = JSON.parse(localStorage.getItem('token'))
+        let urls = []
         if(token) {
             const config = {
-                header:{
+                headers:{
                     'Authorization': `Bearer ${token.access_token}`
                 }
             }
-            const data = {}
-            await axios.post("/api/getUrl", data, config)
+            await axios.get("/api/getUrl", config)
             .then((res) => {
-                this.response = JSON.parse(JSON.stringify(res.data))
+                urls = JSON.parse(JSON.stringify(res.data))
             })
             .catch((e) => {
-                this.error = 'Erro: ', e
+                error = 'Erro: ', e
             })
         }
+        url.value = urls
     }
-    
-    async function makeShortUrl(string) {
+    async function getShortUrl(string) {
         const token = JSON.parse(localStorage.getItem('token'))
+        let data = []
         if(token) {
             const config = {
-                header:{
+                headers:{
                     'Authorization': `Bearer ${token.access_token}`
                 }
             }
@@ -36,12 +39,13 @@ export const urlApiStore = defineStore('url', () => {
                 data: string
             }, config)
             .then((res) => {
-                this.response = JSON.parse(JSON.stringify(res.data))
+                data = JSON.parse(JSON.stringify(res.data))
             })
             .catch((e) => {
-                this.error = 'Erro: ', e
+                error = 'Erro: ', e
             })
         }
+        response.value = data
     }
-    return { created , makeShortUrl , response , error }
+    return { getUrl , getShortUrl , response , url , error }
 })

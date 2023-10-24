@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { authStore } from '../stores/auth'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
@@ -19,7 +20,8 @@ const router = createRouter({
       name: 'login',
       component: LoginView,
       beforeEnter: (to, from, next) => {
-        if (!localStorage.getItem('token')) {
+        const store = authStore()
+        if (store.isSignedIn()) {
           next()
         } else {
           next('/profile')
@@ -31,7 +33,8 @@ const router = createRouter({
       name: 'register',
       component: RegisterView,
       beforeEnter: (to, from, next) => {
-        if (!localStorage.getItem('token')) {
+        const store = authStore()
+        if (!store.isSignedIn()) {
           next()
         } else {
           next('/profile')
@@ -48,7 +51,8 @@ const router = createRouter({
       name: 'profile',
       component: ProfileView,
       beforeEnter: (to, from, next) => {
-        if (localStorage.getItem('token')) {
+        const store = authStore()
+        if (store.isSignedIn()) {
           next()
         } else {
           next('/login')
@@ -60,7 +64,8 @@ const router = createRouter({
       name: 'panel',
       component: PanelView,
       beforeEnter: (to, from, next) => {
-        if (localStorage.getItem('token')) {
+        const store = authStore()
+        if (store.isSignedIn()) {
           next()
         } else {
           next('/login')

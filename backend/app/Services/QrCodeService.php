@@ -19,8 +19,12 @@ class QrCodeService implements IQrCodeService
 {
     protected User $user;
     protected QrCodes $qrCode;
+    protected $userId;
 
     public function __construct(User $user, QrCodes $qrCode) {
+        $auth = auth()->user();
+        $this->userId = $auth['id'];
+
         $this->user = $user;
         $this->qrCode = $qrCode;
     }
@@ -29,10 +33,8 @@ class QrCodeService implements IQrCodeService
     {
         try
         {
-            $urlCode = explode("=", $url);
-            
-            $urlDb = Urls::where('short_url', $urlCode[1])
-            ->where('user_id', 1)->first();
+            $urlDb = Urls::where('short_url', $url)
+            ->where('user_id', $this->userId)->first();
             
             return isset($urlDb) ? self::storeQrCode( $urlDb['id'], $url) :
                 "Ocorreu um erro ao ler a URL!";
@@ -49,17 +51,17 @@ class QrCodeService implements IQrCodeService
 
     private function storeQrCode($urlDb, $url)
     {
-        $qrCodeDb = self::findQrCode($urlDb, 1);
+        $qrCodeDb = self::findQrCode($urlDb);
 
-        if(isset($qrCodeDb))
+        if(!isset($qrCodeDb))
         {
-            $svg = self::svgQrCode("http://localhost:90/api/?uri=".$url);
+            $svg = self::svgQrCode($url);
             $svgName = self::saveDirectorySvg($svg);
             
             $this->qrCode->create([
                 'dir_code' => $svgName,
                 'url_id' => $urlDb,
-                'user_id' => 1
+                'user_id' => $this->userId
             ])->save();
             return $svg;
         }
@@ -88,12 +90,12 @@ class QrCodeService implements IQrCodeService
         return $svgName;
     }
 
-    private static function findQrCode($url_id, $user_id)
+    private function findQrCode($urlId)
     {
         try
         {
-            return QrCodes::where('url_id', $url_id)
-                ->where('user_id', $user_id)->first();
+            return QrCodes::where('url_id', $urlId)
+                ->where('user_id', $this->userId)->first();
         }
         catch(ModelNotFoundException $e)
         {

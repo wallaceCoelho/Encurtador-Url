@@ -44,8 +44,6 @@ class UrlController extends Controller
 
     public function getAllUrls() : JsonResponse
     {
-        return response()->json([
-            'url' => $this->url->getAllUrls()
-        ]);
+        return response()->json($this->url->getAllUrls());
     }
 }

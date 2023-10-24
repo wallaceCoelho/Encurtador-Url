@@ -1,15 +1,15 @@
 <script setup>
 import Buttom from './Buttom.vue';
-import { urlApiStore } from '../stores/url';
-import { ref } from 'vue';
+import { urlApiStore } from '@/stores/url';
+import { ref , computed } from 'vue';
 
-const apiUrl = urlApiStore()
+const store = urlApiStore()
+let response = computed(() => store.response)
 const url = ref('')
 
 function postUrl(){
-  apiUrl.makeShortUrl(url.value.value)
+  store.getShortUrl(url.value.value)
 }
-
 </script>
 
 <template>
@@ -20,18 +20,18 @@ function postUrl(){
     <Buttom text="Gerar" />
   </form>
 
-  <dl v-if="Object.keys(apiUrl.response).length != 0" class="max-w-md mx-auto text-center text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+  <dl v-if="Object.keys(response).length != 0" class="max-w-md mx-auto text-center text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
     <div class="flex flex-col pb-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">URL Original:</dt>
-        <dd class="text md:text-lg font-bold">{{ apiUrl.response.long_url }}</dd>
+        <dd class="text md:text-lg font-bold">{{ response.long_url }}</dd>
     </div>
     <div class="flex flex-col py-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">URL Encurtada:</dt>
-        <dd class="text md:text-lg font-bold">{{ apiUrl.response.short_url }}</dd>
+        <dd class="text md:text-lg font-bold">{{ response.short_url }}</dd>
     </div>
     <div class="flex flex-col pt-3">
         <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Qr Code:</dt>
-        <svg class="svg mx-auto" viewBox="0 0 400 400" v-html="apiUrl.response.qr_code"></svg>
+        <svg class="svg mx-auto" viewBox="0 0 400 400" v-html="response.qr_code"></svg>
     </div>
   </dl>
 

@@ -5,7 +5,8 @@ import UseTerms from './UseTerms.vue';
 import { authStore } from '../stores/auth'
 import Authenticator from './Authenticator.vue';
 
-const login = authStore()
+const store = authStore()
+console.log(store.isSignedIn())
 
 </script>
 <template>
@@ -16,7 +17,7 @@ const login = authStore()
       <p class="text-blue-800 to-purple-700 font-bold text-4xl">Short Url</p>
     </div>
     <div class="flex md:order-2">
-        <DropDownUser v-if="login.isSignedIn()"/>
+        <DropDownUser v-if="store.isSignedIn()"/>
         <Authenticator v-else/>
     </div>
     <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">

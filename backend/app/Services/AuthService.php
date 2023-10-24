@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Services\Interfaces\IAuthService;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -53,7 +55,8 @@ class AuthService implements IAuthService
             ],
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 24,
+            'login_in' => new DateTime('now', new DateTimeZone('America/Sao_Paulo'))
         ]);
     }
 }

@@ -1,6 +1,16 @@
 <script setup>
 import Buttom from '../components/Buttom.vue'
 import BannerForms from '../components/BannerForms.vue'
+import { userStore } from '../stores/users'
+import { ref , computed } from 'vue'
+
+const store = userStore()
+let response = computed(() => store.response)
+const name = ref('')
+
+function register(){
+  store.registerUser(name.value.value)
+}
 
 </script>
 
@@ -8,7 +18,7 @@ import BannerForms from '../components/BannerForms.vue'
     <div class="box md:flex">
         <BannerForms />
         <div class="flex md:w-1/2 justify-center py-10 items-center bg-white">
-            <form class="bg-white">
+            <form @submit.prevent="register" class="bg-white">
                 <h1 class="text-gray-800 font-bold text-2xl mb-1">Olá, seja bem vindo!</h1>
                 <p class="text-sm font-normal text-gray-600 mb-7">Por favor, preencha o formulário</p>
                 <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">

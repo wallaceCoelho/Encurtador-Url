@@ -19,7 +19,7 @@ export const authStore = defineStore('auth', () => {
         const token = JSON.parse(localStorage.getItem('token'))
         if(token) {
             const config = {
-                header:{
+                headers:{
                     'Authorization': `Bearer ${token.access_token}`
                 }
             }
@@ -37,7 +37,16 @@ export const authStore = defineStore('auth', () => {
     }
     
     function isSignedIn () {
-        return !localStorage.getItem('token') ? false : true
+        const token = JSON.parse(localStorage.getItem('token'))
+        if(token){
+            const dateToken = new Date(token.login_in['date'])
+            if((dateToken - new Date()) > token.expires_in){
+                localStorage.removeItem('token')
+                return false
+            }   
+            else if ((dateToken - new Date()) < token.expires_in) return true
+        }
+        else return false
     }
     
     return { signIn , signOut , isSignedIn }
