@@ -4,37 +4,30 @@ import { ref } from 'vue'
 
 export const userStore = defineStore('users', () => {
     let response = ref({})
+    let users = ref({})
 
     async function getUser(){
         const token = JSON.parse(localStorage.getItem('token'))
-        const userId = token.user['user_id']
-
-        const config = {
-            headers:{
-                'Authorization': `Bearer ${token.access_token}`
+        let user = []
+        if(token) {
+            const config = {
+                headers:{
+                    'Authorization': `Bearer ${token.access_token}`
+                }
             }
+            await axios.get('/api/getUser',config)
+            .then((res) => {
+                user = JSON.parse(JSON.stringify(res.data))
+            })
+            .catch((error) => {
+                console.log(`ERRO: ${error}`)
+            })
         }
-        const data = {
-            id: userId
-        }
-
-        await axios.get('/api/users', data, config)
-        .then((res) => {
-            response = JSON.parse(JSON.stringify(res.data))
-        })
-        .catch((error) => {
-            console.log(`ERRO: ${error}`)
-        })
+        users.value = user[0]
     }
 
-    async function registerUser(name, email, password, active, nickname){
-        const data = {
-            name: name,
-            email: email,
-            nickname: nickname,
-            password: password,
-            active: active
-        }
+    async function registerUser(person){
+        const data = person
 
         await axios.post('api/register', data)
         .then((res) => {
@@ -45,5 +38,5 @@ export const userStore = defineStore('users', () => {
         })
     }
 
-    return { registerUser , getUser , response }
+    return { registerUser , getUser , response , users }
 })

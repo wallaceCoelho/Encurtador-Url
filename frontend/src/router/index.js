@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { authStore } from '../stores/auth'
+import { computed } from 'vue'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
@@ -21,10 +22,11 @@ const router = createRouter({
       component: LoginView,
       beforeEnter: (to, from, next) => {
         const store = authStore()
-        if (store.isSignedIn()) {
-          next()
-        } else {
+        let isSignedIn = computed(() => store.response)
+        if (isSignedIn.value) {
           next('/profile')
+        } else {
+          next()
         }
       }
     },
@@ -34,10 +36,11 @@ const router = createRouter({
       component: RegisterView,
       beforeEnter: (to, from, next) => {
         const store = authStore()
-        if (!store.isSignedIn()) {
-          next()
-        } else {
+        let isSignedIn = computed(() => store.response)
+        if (isSignedIn.value) {
           next('/profile')
+        } else {
+          next()
         }
       }
     },
@@ -52,10 +55,11 @@ const router = createRouter({
       component: ProfileView,
       beforeEnter: (to, from, next) => {
         const store = authStore()
-        if (store.isSignedIn()) {
-          next()
-        } else {
+        let isSignedIn = computed(() => store.response)
+        if (!isSignedIn.value) {
           next('/login')
+        } else {
+          next()
         }
       }
     },
@@ -65,10 +69,11 @@ const router = createRouter({
       component: PanelView,
       beforeEnter: (to, from, next) => {
         const store = authStore()
-        if (store.isSignedIn()) {
-          next()
-        } else {
+        let isSignedIn = computed(() => store.response)
+        if (!isSignedIn.value) {
           next('/login')
+        } else {
+          next()
         }
       }
     },

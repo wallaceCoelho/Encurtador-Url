@@ -1,13 +1,6 @@
-<script>
+<script setup>
 import InputForm from '../components/InputForm.vue'
 import Table from '../components/Table.vue'
-
-export default {
-    components:{
-        InputForm,
-        Table
-    }
-}
 
 </script>
 
@@ -18,9 +11,6 @@ export default {
         <InputForm />
       </div>
     </main>
-    <div class="table-title mt-16 mb-8 max-md:-ms-16">
-      <p class="text-2xl text-left font-medium text-gray-900 dark:text-white">Histórico</p>
-    </div>
     <div class="w-2/4 mx-auto max-md:w-full h-screen">
       <Table />
     </div>
@@ -28,9 +18,5 @@ export default {
 </template>
 
 <style scoped>
-
-.table-title{
-  margin-left: 25%;
-}
 
 </style>

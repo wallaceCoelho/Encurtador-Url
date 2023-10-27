@@ -15,7 +15,11 @@ class UserController extends Controller
     }
     public function register(Request $request) : JsonResponse
     {
-        $data = $request->only(['name', 'email', 'password', 'nickname', 'active']);
-        return response()->json($this->userService->register($data));
+        $response = $request->only(['name', 'email', 'password', 'nickname', 'active']);
+        return response()->json($this->userService->register($response));
+    }
+    public function getUser() : JsonResponse
+    {
+        return response()->json($this->userService->getUsers());
     }
 }

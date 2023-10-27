@@ -5,13 +5,18 @@ namespace App\Services;
 use App\Models\User;
 use App\Services\Interfaces\IUserService;
 use ErrorException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 
 class UserService implements IUserService
 {
     protected User $user;
+    protected $userId;
 
     public function __construct(User $user) {
+        $auth = auth()->user();
+        $this->userId = $auth['id'];
+
         $this->user = $user;
     }
 
@@ -25,6 +30,22 @@ class UserService implements IUserService
         catch(ErrorException $e)
         {
             return ['response' => 'Erro: '.$e];
+        }
+    }
+
+    public function getUsers() : array
+    {
+        try
+        {
+            return auth()->check() ? array($this->user->find($this->userId)) : [];
+        }
+        catch(ModelNotFoundException $e)
+        {
+            return (['error' => 'ERRO: '. $e->getMessage()]);
+        }
+        catch(ErrorException $e)
+        {
+            return (['error' => 'ERRO: '. $e->getMessage()]);
         }
     }
 

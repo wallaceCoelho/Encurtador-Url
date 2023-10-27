@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-
+import { ref } from 'vue'
 
 export const authStore = defineStore('auth', () => {
-    
+    let response = ref(false)
+
     async function signIn(email, password) {
         await axios.post("/api/login", {
             email: email,
@@ -42,13 +43,13 @@ export const authStore = defineStore('auth', () => {
             const dateToken = new Date(token.login_in['date'])
             if((dateToken - new Date()) > token.expires_in){
                 localStorage.removeItem('token')
-                return false
+                response.value = false
             }   
-            else if ((dateToken - new Date()) < token.expires_in) return true
+            else if ((dateToken - new Date()) < token.expires_in) response.value = true
         }
-        else return false
+        else response.value = false
     }
     
-    return { signIn , signOut , isSignedIn }
+    return { signIn , signOut , isSignedIn , response }
 })
     

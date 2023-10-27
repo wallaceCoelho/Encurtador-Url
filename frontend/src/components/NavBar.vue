@@ -4,9 +4,10 @@ import DropDownUser from './DropDownUser.vue'
 import UseTerms from './UseTerms.vue';
 import { authStore } from '../stores/auth'
 import Authenticator from './Authenticator.vue';
+import { computed } from 'vue'
 
 const store = authStore()
-console.log(store.isSignedIn())
+let isSignedIn = computed(() => store.response)
 
 </script>
 <template>
@@ -17,7 +18,7 @@ console.log(store.isSignedIn())
       <p class="text-blue-800 to-purple-700 font-bold text-4xl">Short Url</p>
     </div>
     <div class="flex md:order-2">
-        <DropDownUser v-if="store.isSignedIn()"/>
+        <DropDownUser v-if="isSignedIn"/>
         <Authenticator v-else/>
     </div>
     <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">

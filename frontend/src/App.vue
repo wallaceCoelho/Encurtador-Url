@@ -1,7 +1,16 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue';
 import Footer from './components/Footer.vue';
+import { authStore } from './stores/auth'
+import { onMounted } from 'vue'
+
+const store = authStore()
+
+onMounted(async () => {
+    await store.isSignedIn()
+})
+
 
 </script>
 
@@ -15,7 +24,7 @@ import Footer from './components/Footer.vue';
     <RouterView />
   </div>
 
-  <footer>
+  <footer class="max-lg:mt-32">
     <Footer />
   </footer>
 
