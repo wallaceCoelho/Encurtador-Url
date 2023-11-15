@@ -8,5 +8,7 @@ interface IUrlService
 
     public function compactUrl(string $url) : array;
 
+    public function delete(int $id) : array;
+
     public function getAllUrls() : array;
 }

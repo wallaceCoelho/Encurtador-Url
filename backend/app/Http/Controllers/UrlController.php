@@ -30,6 +30,12 @@ class UrlController extends Controller
             ]);
     }
 
+    public function deleteUrl(Request $request) : JsonResponse
+    {
+        $id = (int) $request->get('id');
+        return response()->json($this->url->delete($id));
+    }
+
     public function shortUrl(Request $request) : JsonResponse
     {
         $responseUrl = $this->url->compactUrl($request->get('data'));

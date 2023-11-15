@@ -47,5 +47,28 @@ export const urlApiStore = defineStore('url', () => {
         }
         response.value = data
     }
-    return { getUrl , getShortUrl , response , url , error }
+
+    async function deleteUrl(id) {
+        const token = JSON.parse(localStorage.getItem('token'))
+        let data = []
+        if(token) {
+            const config = {
+                headers:{
+                    'Authorization': `Bearer ${token.access_token}`
+                }
+            }
+            await axios.post("/api/deleteUrl", {
+                id: id
+            }, config)
+            .then((res) => {
+                alert(JSON.parse(JSON.stringify(res.data.message)))
+                location.reload()
+            })
+            .catch((e) => {
+                error = 'Erro: ', e
+            })
+        }
+        response.value = data
+    }
+    return { getUrl , getShortUrl , deleteUrl , response , url , error }
 })

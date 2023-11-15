@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\QrCodes;
 use App\Models\Urls;
 use App\Models\User;
 use App\Services\Interfaces\IUrlService;
@@ -14,14 +15,16 @@ class UrlService implements IUrlService
 {
     protected Urls $url;
     protected User $user;
+    protected QrCodes $qrCode;
     protected $userId;
 
-    public function __construct(User $user, Urls $url) {
+    public function __construct(User $user, Urls $url, QrCodes $qrCode) {
         $auth = auth()->user();
         $this->userId = $auth['id'];
 
         $this->url = $url;
         $this->user = $user;
+        $this->qrCode = $qrCode;
     }
 
     public function redirect(string $url) : string
@@ -32,6 +35,28 @@ class UrlService implements IUrlService
             ->where('user_id', $this->userId)->firstOrFail();
             
             return $urlDb['url'];
+        }
+        catch(ModelNotFoundException $e)
+        {
+            return "Erro: ".$e->getMessage();
+        }
+    }
+
+    public function delete(int $id) : array
+    {
+        try
+        {
+            $url = $this->url->find($id);
+
+            if($url)
+            {
+                $code = $this->qrCode->where('url_id', $url['id'])->where('user_id', $this->userId);
+                $code->delete();
+                $url->delete();
+                return (['message' => "Registro apagado"]);
+            }
+            return (['message' => "Url não encontrada"]);
+
         }
         catch(ModelNotFoundException $e)
         {
@@ -119,6 +144,7 @@ class UrlService implements IUrlService
         foreach($res as $item)
         {
             $response[$count] = [
+                'id' => $item->id,
                 'url' => $item->url,
                 'short_url' => $item->short_url,
                 'code' => Storage::get($item->dir_code)

@@ -11,7 +11,7 @@ import Table from '../components/Table.vue'
         <InputForm />
       </div>
     </main>
-    <div class="w-2/4 mx-auto max-md:w-full h-screen">
+    <div class="w-2/4 mx-auto max-xl:w-full h-screen">
       <Table />
     </div>
 

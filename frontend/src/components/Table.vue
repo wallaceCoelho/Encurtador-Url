@@ -5,6 +5,14 @@ import { onMounted , computed } from 'vue'
 const store = urlApiStore()
 let urls = computed(() => store.url)
 
+async function deleteUrl(id){
+  try{
+    await store.deleteUrl(id)
+  } catch (error) {
+    console.error('Erro ao carregar os dados:', error)
+  }
+}
+
 onMounted(async () => {
   try {
     await store.getUrl()
@@ -52,7 +60,7 @@ onMounted(async () => {
                 <td class="px-6 py-4 text-right">
                   <div class="flex space-x-4">
                     <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Info</a>
-                    <a href="#">
+                    <a type="button" @click="deleteUrl(url.id)">
                       <svg class="svg-crash" viewBox="0 0 600 600">
                         <image class="fill-gray-500 w-full" href="../assets/crash.svg" />
                       </svg>

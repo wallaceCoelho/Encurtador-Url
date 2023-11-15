@@ -15,6 +15,11 @@ class AuthController extends Controller
         $this->auth = $auth;
     }
 
+    public function me() : JsonResponse
+    {
+        return $this->auth->me();
+    }
+
     public function login(Request $request) : JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
@@ -25,6 +30,20 @@ class AuthController extends Controller
     public function logout() : JsonResponse
     {
         return $this->auth->logout();
+    }
+
+    public function resetPassword(Request $request) : JsonResponse
+    {
+        /*
+        $userExist = User::where('email', $request['email'])->get();
+        if($userExist)
+        {
+            $token = Str::random(60);
+            Mail::to($request['email'])->send(new MailPasswordService($token));
+            return response()->json(['response' => 'Email enviado', 'token' => $token]);
+        }
+        */
+        return response()->json(['response' => 'Email não cadastrado!']);
     }
     
 }

@@ -21,25 +21,28 @@ use Symfony\Component\Security\Core\Role\Role;
 Route::controller(UrlController::class)->group(function ()
 {
     Route::get('/', 'redirectUrl');
-});
-
-Route::post('/register', [UserController::class, 'register']);
-
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::middleware(['jwt.auth'])->group(function () 
-{
-
-    Route::controller(UrlController::class)->group(function ()
+    Route::middleware(['jwt.auth'])->group(function () 
     {
         Route::post('/url', 'shortUrl');
         Route::get('/getUrl', 'getAllUrls');
+        Route::post('/deleteUrl', 'deleteUrl');
     });
-    Route::controller(AuthController::class)->group(function ()
+});
+
+Route::controller(AuthController::class)->group(function ()
+{
+    Route::post('/login', 'login');
+    Route::middleware(['jwt.auth'])->group(function () 
     {
-        Route::post('/logout','logout');
+        Route::post('/logout', 'logout');
+        Route::post('/refresh', 'refresh');
+        Route::get('/me', 'me');
     });
-    Route::controller(UserController::class)->group(function () 
+});
+Route::controller(UserController::class)->group(function () 
+{
+    Route::post('/register', 'register');
+    Route::middleware(['jwt.auth'])->group(function () 
     {
         Route::get('/getUser', 'getUser');
     });

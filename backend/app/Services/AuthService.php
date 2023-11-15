@@ -41,6 +41,11 @@ class AuthService implements IAuthService
 
     }
 
+    public function me() : JsonResponse
+    {
+        return response()->json(auth()->user());
+    }
+
     public function refresh() : JsonResponse
     {
         return $this->responseWithToken(auth()->refresh());
@@ -50,12 +55,10 @@ class AuthService implements IAuthService
     {
         $user = auth()->user();
         return response()->json([
-            'user' => [
-                'user_id' => $user['id']
-            ],
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 24,
+            'user_id' => $user['id'],
+            'expires_in' => auth()->factory()->getTTL(),
             'login_in' => new DateTime('now', new DateTimeZone('America/Sao_Paulo'))
         ]);
     }
