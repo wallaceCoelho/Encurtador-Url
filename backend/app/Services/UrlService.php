@@ -4,26 +4,23 @@ namespace App\Services;
 
 use App\Models\QrCodes;
 use App\Models\Urls;
-use App\Models\User;
+use App\Services\Base\ServiceBase;
 use App\Services\Interfaces\IUrlService;
 use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Storage;
 
-class UrlService implements IUrlService
+class UrlService extends ServiceBase implements IUrlService
 {
     protected Urls $url;
-    protected User $user;
     protected QrCodes $qrCode;
     protected $userId;
 
-    public function __construct(User $user, Urls $url, QrCodes $qrCode) {
+    public function __construct(Urls $url, QrCodes $qrCode) {
         $auth = auth()->user();
         $this->userId = $auth['id'];
 
         $this->url = $url;
-        $this->user = $user;
         $this->qrCode = $qrCode;
     }
 
@@ -102,66 +99,19 @@ class UrlService implements IUrlService
         }
     }
 
-    private function createCode(string $longUrl) : array
+    public function getUrl(int $id) : array
     {
-        $urlDb = $this->url->where('url', $longUrl)
-            ->where('user_id', $this->userId)->first();
-
-        if(isset($urlDb))
+        try
         {
-            return ([
-                'long_url' => $urlDb['url'],
-                'short_url' => "http://localhost:90/api/?uri=".$urlDb['short_url']
-            ]);   
+            return self::firstUrl($id);
         }
-
-        $urlCode = self::generateRandonCode();
-        
-        $this->url->create([
-            'url' => $longUrl,
-            'short_url' => "http://localhost:90/api/?uri=".$urlCode,
-            'user_id' => $this->userId
-        ])->save();
-        
-        return ([
-            'long_url' => $longUrl,
-            'short_url' => "http://localhost:90/api/?uri=".$urlCode
-        ]);
-    }
-
-    private function listUrl() : array
-    {
-        $response = [];
-        $count = 0;
-
-        $res = $this->url->join('qr_codes', function ($join) {
-            $join->on('urls.id', '=', 'qr_codes.url_id')
-                    ->where('urls.user_id', '=', $this->userId);
-        })
-        ->select('urls.*', 'qr_codes.dir_code')
-        ->get();
-
-        foreach($res as $item)
+        catch(ModelNotFoundException $e)
         {
-            $response[$count] = [
-                'id' => $item->id,
-                'url' => $item->url,
-                'short_url' => $item->short_url,
-                'code' => Storage::get($item->dir_code)
-            ];
-            $count++;
+            return (['error' => 'ERRO: '. $e->getMessage()]);
         }
-
-        return $response;
-    }
-
-    private static function generateRandonCode(int $length = 6) : string
-    {
-        $char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $code = '';
-        for ($i = 0; $i < $length; $i++) {
-            $code .= $char[rand(0, strlen($char) - 1)];
+        catch(ErrorException $e)
+        {
+            return (['error' => 'ERRO: '. $e->getMessage()]);
         }
-        return $code;
     }
 }

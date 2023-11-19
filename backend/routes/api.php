@@ -24,8 +24,9 @@ Route::controller(UrlController::class)->group(function ()
     Route::middleware(['jwt.auth'])->group(function () 
     {
         Route::post('/url', 'shortUrl');
-        Route::get('/getUrl', 'getAllUrls');
+        Route::get('/getAllUrl', 'getAllUrls');
         Route::post('/deleteUrl', 'deleteUrl');
+        Route::get('/getUrl', 'getUrl');
     });
 });
 

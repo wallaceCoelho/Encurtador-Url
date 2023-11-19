@@ -52,4 +52,10 @@ class UrlController extends Controller
     {
         return response()->json($this->url->getAllUrls());
     }
+
+    public function getUrl(Request $request) : JsonResponse
+    {
+        $id = (int) $request->get('id');
+        return response()->json($this->url->getUrl($id));
+    }
 }

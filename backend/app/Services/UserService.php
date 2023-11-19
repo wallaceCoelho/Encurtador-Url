@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Services\Base\ServiceBase;
 use App\Services\Interfaces\IUserService;
 use ErrorException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Hash;
 
-class UserService implements IUserService
+class UserService extends ServiceBase implements IUserService
 {
     protected User $user;
     protected $userId;
@@ -47,23 +47,5 @@ class UserService implements IUserService
         {
             return (['error' => 'ERRO: '. $e->getMessage()]);
         }
-    }
-
-    private function storeUser(array $request) : bool
-    {
-        $userExists = $this->user->where('email', $request['email'])->first();
-
-        if(!isset($userExists))
-        {
-            $this->user->create([
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'nickname' => $request['nickname'],
-                'active' => $request['active'],
-                'password' => Hash::make($request['password'])
-            ])->save();
-            return true;
-        }
-        return false;
     }
 }

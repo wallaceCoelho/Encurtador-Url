@@ -5,9 +5,10 @@ import { ref } from 'vue'
 export const urlApiStore = defineStore('url', () => {
     let error = ref('')
     let response = ref({})
-    let url = ref([])
+    let allUrl = ref([])
+    let url = ref({})
 
-    async function getUrl() {
+    async function getAllUrl() {
         const token = JSON.parse(localStorage.getItem('token'))
         let urls = []
         if(token) {
@@ -16,7 +17,7 @@ export const urlApiStore = defineStore('url', () => {
                     'Authorization': `Bearer ${token.access_token}`
                 }
             }
-            await axios.get("/api/getUrl", config)
+            await axios.get("/api/getAllUrl", config)
             .then((res) => {
                 urls = JSON.parse(JSON.stringify(res.data))
             })
@@ -24,7 +25,7 @@ export const urlApiStore = defineStore('url', () => {
                 error = 'Erro: ', e
             })
         }
-        url.value = urls
+        allUrl.value = urls
     }
     async function getShortUrl(string) {
         const token = JSON.parse(localStorage.getItem('token'))
@@ -70,5 +71,25 @@ export const urlApiStore = defineStore('url', () => {
         }
         response.value = data
     }
-    return { getUrl , getShortUrl , deleteUrl , response , url , error }
+
+    async function getUrl(id) {
+        const token = JSON.parse(localStorage.getItem('token'))
+        let data = []
+        if(token) {
+            const config = {
+                headers:{
+                    'Authorization': `Bearer ${token.access_token}`
+                }
+            }
+            await axios.get(`/api/getUrl?id=${id}`, config)
+            .then((res) => {
+                data = JSON.parse(JSON.stringify(res.data))
+            })
+            .catch((e) => {
+                error = 'Erro: ', e
+            })
+        }
+        url.value = data
+    }
+    return { getUrl , getAllUrl , getShortUrl , deleteUrl , response , allUrl , error , url }
 })

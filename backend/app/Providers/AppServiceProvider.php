@@ -8,6 +8,7 @@ use App\Services\Interfaces\IUrlService;
 use App\Services\Interfaces\IUserService;
 use App\Services\QrCodeService;
 use App\Services\AuthService;
+use App\Services\Base\ServiceBase;
 use App\Services\UrlService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
